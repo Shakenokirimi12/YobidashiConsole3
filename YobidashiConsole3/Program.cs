@@ -52,7 +52,7 @@ namespace DormitoryConsole
         }
 
 
-        static async void SendToVoiceVox(string text, int speakerNum)
+        static async void SendToVoiceVox(string text, int speakerNum)//VOICEVOXに指示を送る。
         {
             string speakerString = speakerNum.ToString();
             var parameters = new Dictionary<string, string>()
@@ -81,7 +81,7 @@ namespace DormitoryConsole
             }
         }
 
-        static async void SendToCoeiroInk(string text, int speakerNum)
+        static async void SendToCoeiroInk(string text, int speakerNum)//COEIROINKに指示を送る。
         {
             string speakerString = speakerNum.ToString();
             var parameters = new Dictionary<string, string>()
