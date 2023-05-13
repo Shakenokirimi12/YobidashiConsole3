@@ -52,62 +52,11 @@ namespace DormitoryConsole
         }
 
 
-        static async void SendToVoiceVox(string text, int speakerNum)//VOICEVOXに指示を送る。
+        static async void VoiceSynthesis(string text, string speakerName)//VOICEVOXに指示を送る。
         {
-            string speakerString = speakerNum.ToString();
-            var parameters = new Dictionary<string, string>()
-            {
-                { "text", text },
-                { "speaker", speakerString },
-            };
             Console.WriteLine(text);
-            Console.WriteLine("キャラクター番号は" + num.ToString() + "番です。");
             Console.WriteLine("実行までしばらくお待ちください。");
-            string encodedParamaters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
-            using (var resultAudioQuery = await httpClient.PostAsync(@"http://localhost:50021/audio_query?" + encodedParamaters, null))
-            {
-                string resBodyStr = await resultAudioQuery.Content.ReadAsStringAsync();
-                var content = new StringContent(resBodyStr, Encoding.UTF8, @"application/json");
-                using (var resultSynthesis = await httpClient.PostAsync(@"http://localhost:50021/synthesis?speaker=" + speakerString, content))
-                {
-                    PlaySound();
-                    StopSound();
-                    Stream stream = await resultSynthesis.Content.ReadAsStreamAsync();
-                    SoundPlayer soundPlayer = new SoundPlayer(stream);
-                    soundPlayer.PlaySync();
-                    PlaySound();
-                    StopSound();
-                }
-            }
-        }
-
-        static async void SendToCoeiroInk(string text, int speakerNum)//COEIROINKに指示を送る。
-        {
-            string speakerString = speakerNum.ToString();
-            var parameters = new Dictionary<string, string>()
-            {
-                { "text", text },
-                { "speaker", speakerString },
-            };
-            Console.WriteLine(text);
-            Console.WriteLine("キャラクター番号は" + num.ToString() + "番です。");
-            Console.WriteLine("実行までしばらくお待ちください。");
-            string encodedParamaters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
-            using (var resultAudioQuery = await httpClient.PostAsync(@"http://localhost:50031/audio_query?" + encodedParamaters, null))
-            {
-                string resBodyStr = await resultAudioQuery.Content.ReadAsStringAsync();
-                var content = new StringContent(resBodyStr, Encoding.UTF8, @"application/json");
-                using (var resultSynthesis = await httpClient.PostAsync(@"http://localhost:50031/synthesis?speaker=" + speakerString, content))
-                {
-                    PlaySound();
-                    StopSound();
-                    Stream stream = await resultSynthesis.Content.ReadAsStreamAsync();
-                    SoundPlayer soundPlayer = new SoundPlayer(stream);
-                    soundPlayer.PlaySync();
-                    PlaySound();
-                    StopSound();
-                }
-            }
+            await httpClient.GetAsync(@"http://localhost:1000/?name=" + speakerName + "&text=" + text);   
         }
 
 
@@ -115,11 +64,11 @@ namespace DormitoryConsole
         static void readtextfile()
         {
             var program = new Program();
-            using (var reader = program.OpenReadFile("C:\\DormitorySupporter\\Files\\Settings\\YobidashiConsole\\Yobidashi_Temp.txt"))
+            using (var reader = program.OpenReadFile("Settings/Yobidashi_Temp.txt"))
             {
                 readString = reader.ReadLine();
                 var program2 = new Program();
-                using (var fileStream = new FileStream("C:\\DormitorySupporter\\Files\\Settings\\YobidashiConsole\\Yobidashi_Temp.txt", FileMode.Open))
+                using (var fileStream = new FileStream("Settings/Yobidashi_Temp.txt", FileMode.Open))
                 {
                     fileStream.SetLength(0);
                 }
@@ -128,18 +77,8 @@ namespace DormitoryConsole
                     if (readString != null)
                     {
                         SetSpeaker();
-                        if(EngineType == "VOICEVOX")
-                        {
-                            num = int.Parse(SpeakerInfo);
-                            Console.WriteLine("VOICEVOXで音声合成を行います。");
-                            SendToVoiceVox(readString, num);
-                        }
-                        else if(EngineType == "COEIROINK")
-                        {
-                            num = int.Parse(SpeakerInfo);
-                            Console.WriteLine("COEIROINKで音声合成を行います。");
-                            SendToCoeiroInk(readString, num);
-                        }
+                        string Name = SpeakerInfo;
+                        VoiceSynthesis(readString, Name);
 
                     }
                 }
@@ -147,34 +86,15 @@ namespace DormitoryConsole
         }
 
 
-        static SoundPlayer player = new SoundPlayer("C:\\DormitorySupporter\\Apps\\YobidashiConsole\\Chaim.wav");
+        static SoundPlayer player = new SoundPlayer("Files/Chaim.wav");
 
-        static void PlaySound()
-        {
-            // 再生
-            //player.Play();              // 別スレッドで再生
-            //player.PlayLooping();     // 別スレッドでループ再生
-            player.PlaySync();        // 当該スレッドで再生（再生中は他の操作ができません）
-        }
-
-        static void StopSound()
-        {
-            // 停止
-            player.Stop();
-        }
         
         static void SetSpeaker()
         {
             var program = new Program();
-            using (var reader = program.OpenReadFile("C:\\DormitorySupporter\\Files\\Settings\\YobidashiConsole\\SpeakerNumSetting.txt"))
+            using (var reader = program.OpenReadFile("Settings/SpeakerName.txt"))
             {
                 SpeakerInfo = reader.ReadLine();
-            }
-
-            var program2 = new Program();
-            using (var reader = program2.OpenReadFile("C:\\DormitorySupporter\\Files\\Settings\\YobidashiConsole\\Yobidashi_Engine.txt"))
-            {
-                EngineType = reader.ReadLine();
             }
         }
 

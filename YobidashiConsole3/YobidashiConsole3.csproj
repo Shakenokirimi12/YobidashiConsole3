@@ -7,7 +7,7 @@
     <ProjectGuid>{61C6CC31-54D8-47E9-AC5A-3B5F294AD93D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>YobidashiConsole3</RootNamespace>
-    <AssemblyName>YobidashiConsole3</AssemblyName>
+    <AssemblyName>YobidashiConsole3.5</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -49,10 +49,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>B2E029F6ADF7CC1B2B4771329221A91EB9273896</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>CB69D00DD32BD2DE2B3AF9EE7E5F6B3AE2386CFF</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>YobidashiConsole3_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>YobidashiConsole3_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="YobidashiConsole3_1_TemporaryKey.pfx" />
     <None Include="YobidashiConsole3_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
